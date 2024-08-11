@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>weather App</title>
+    <style>
+                *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Quicksand", sans-serif;
+        }
+
+        body{
+            background-color: #f3f2ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-height: 100vh;
+            width: 100vw;
+        }
+
+        html,body{
+            font-size: 62.5%;
+            height: 100%;
+        }
+
+        html{
+        background: #eee;
+        }
+
+        .box{
+            width: 20vw;
+            height: 60vh;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.2rem 3rem rgba(0,0,0,0.2);
+            background-color: #a5bbdd;
+            position: relative;
+            overflow: hidden;
+            transform: translate(0, 0, 0);
+            min-width: 20rem;
+            min-height: 35rem; 
+        }
+
+        .wave{
+            opacity: 0.3;
+            position: absolute;
+            top: 20rem;
+            left: -14rem;
+            background: #eee;
+            width: 50rem;
+            height: 50rem;
+            transform-origin: 50% 48%;
+            border-radius: 43%;
+            animation: rotate 2.5s linear infinite;
+            z-index: 1;
+        }
+
+
+        
+
+        .wave.three{
+            animation: rotate 5s infinite linear;
+            z-index: 2 !important;
+            opacity: 0.2;
+        }
+
+        .wave.two{
+            animation: rotate 7s infinite linear;
+            opacity: 0.1;
+            z-index: 3 !important;
+        }
+
+        @keyframes rotate {
+            0% {
+            transform: rotate(0deg);
+            }
+            100% {
+            transform: rotate(360deg);
+            }
+        }
+
+
+        .info{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 45%;
+            z-index: 4;
+        }
+
+        .location{
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: 800;
+            font-size: 3rem;
+            font-weight: 600;
+        }
+
+        .fa-street-view{
+            animation: rotates 3s linear infinite alternate;
+        }
+
+        @keyframes rotates {
+            from{
+                transform: translate(-0.5rem);
+            }
+            to{
+                transform: translate(0.5rem);
+            }
+        }
+
+        #date{
+            text-align: center;
+            margin-top: 0.5rem;
+            color: #57606f;
+            font-size: 1.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .temp{
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 3rem;
+        }
+
+        .temp_min{
+            text-align: center;
+            font-weight: 300;
+            margin-top: 0.3rem;
+            color: #57606f;
+            font-size: 1.2rem;
+        }
+
+
+        #weathercon{
+            height: 55%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 6rem;
+        }
+
+        #weathercon .fa-sun{
+            font-size: 6rem;
+            animation:  fas-anime 3s linear infinite alternate;
+        }
+
+        @keyframes fas-anime {
+            from{
+                transform: scale(1.1);
+            }
+            to{
+                transform: scale(1.5);
+            }
+            
+        }
+
+        .fa-sun{
+            
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="wave"></div>
+        <div class="wave two"></div>
+        <div class="wave three"></div>
+        <div id="weathercon">
+            <i class="fa-solid fa-sun"></i>
+        </div>
+        <div class="info">
+            <h1 class="location">
+                <i class="fa-solid fa-street-view" style="color: #fff;"></i>{%location%},{%country%}
+            </h1>
+            <p id="date"> 
+                WEd | OCT 23 | 10:49AM
+            </p>
+            <h1 class="temp">{%tempval%}&deg;C</h1>
+            <p class="temp_min">Min {%mintemp%}&deg;C | Max {%maxtemp%}&deg;C</p>
+        </div>
+    </div>
+    <script>
+        const curDate = document.getElementById('date')
+        let weatherCon = document.getElementById('weathercon')
+
+        const tempstatus = "{%tempstatus%}"
+
+        if(tempstatus=="Clouds"){
+            weatherCon.innerHTML="<i style='color:#f1f2f6' class= 'fa-solid fa-cloud'></i>"
+        }else if(tempstatus=="Sunny"){
+            weatherCon.innerHTML="<i style='color:#eccc68' class='fa-solid fa-sun'></i>"
+        }else if(tempstatus=="Rainy"){
+            weatherCon.innerHTML="<i style='color:#a4b0be' class='fa-solid fa-cloud-rain'></i>"
+        }else{
+            weatherCon.innerHTML="<i style='color:#44c3ed' class='fa-solid fa-cloud'></i>"
+        }
+
+
+        const getCurrentDay = () =>{
+            
+            const weekDay = new Array(7);
+            weekDay[0]="SUN";
+            weekDay[1]="MON";
+            weekDay[2]="TUE";
+            weekDay[3]="WED";
+            weekDay[4]="THU";
+            weekDay[5]="FRI";
+            weekDay[6]="SAT";
+
+            let currentTime = new Date()
+            let day = weekDay[currentTime.getDay()]
+            return day            
+        }
+
+       const getCurrentTime = () =>{
+            let month =[
+                "jan",
+                "Fab",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "sep",
+                "Oct",
+                "Nov",
+                "Dec"
+            ]
+
+            let dateNow = new Date()
+
+            
+            let Month = month[dateNow.getMonth()]
+            let date = dateNow.getDate()
+            
+            let hours = dateNow.getHours()
+            let minuts = dateNow.getMinutes()
+
+            let timePiriods = "AM"
+            
+            if(hours>11){
+                timePiriods = "PM"
+                if (hours>12){
+                    hours-=12
+                }
+            }
+            if(minuts<10){
+                minuts = "0" + minuts;
+            }
+
+            return ` ${Month} ${date} | ${hours}:${minuts}${timePiriods} `
+
+        }
+       curDate.innerHTML = getCurrentDay() + " | "+ getCurrentTime()
+    </script>
+</body>
+</html>
+
+
+<!-- https://api.openweathermap.org/data/2.5/weather?q=Pune&appid=b7406c322eaf624a78db29b8ec1c37ca -->
+
